@@ -11,7 +11,5 @@ class NewsTableViewCell: UITableViewCell {
 
     static let identifier = "NewsTableViewCell"
 
-    
-    @IBOutlet weak var NewsText: UILabel!
-    
+    @IBOutlet weak var PostText: UILabel!
 }

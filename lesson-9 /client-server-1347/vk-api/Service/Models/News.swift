@@ -12,29 +12,17 @@ import RealmSwift
 
 class NewsRealm: Object {
     
-    @objc dynamic var id: Int = 0
-    @objc dynamic var text = ""
-    @objc dynamic var likes = 0
-    @objc dynamic var userLikes = 0
-    @objc dynamic var views = 0
-    @objc dynamic var comments = 0
-    @objc dynamic var reposts = 0
-    @objc dynamic var date = 0
-    @objc dynamic var authorImagePath = ""
-    @objc dynamic var authorName = ""
-
+    @objc dynamic var postID: Int = 0
+    @objc dynamic var text: String = ""
+    @objc dynamic var trackCode: String = ""
+    @objc dynamic var photo_max: String = ""
+    
     convenience required init(json:JSON) {
         self.init()
-        text = json.text.string ?? ""
-        likes = json.likes.int ?? 0
-        userLikes = json.userLikes.int ?? 0
-        views = json.views.int ?? 0
-        comments = json.comments.int ?? 0
-        reposts = json.reposts.int ?? 0
-        date = json.date.int ?? 0
-        authorImagePath = json.authorImagePath.string ?? ""
-        authorName = json.authorName.string ?? ""
-        id = json.id.int ?? 0
+        postID = json.post_id.int ?? 0
+        text = json.text.string ?? "нет заголовка "
+        trackCode = json.trackCode.string ?? ""
+        photo_max = json.photo_max.string ?? ""
     }
     
 }

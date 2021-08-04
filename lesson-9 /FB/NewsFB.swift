@@ -10,43 +10,47 @@ import Firebase
 
 class NewsFB {
     // 1
+    let postID: Int
     let text: String
-    let authorImagePath: String
     let ref: DatabaseReference?
-    let authorName: String
-
+    let photo: String
     
-    init(text: String, authorImagePath: String, authorName: String) {
+    init(postID: Int, text: String, photo: String) {
         // 2
         self.ref = nil
+        self.postID = postID
+//        self.authorImagePath = authorImagePath
+//        self.authorName = authorName
         self.text = text
-        self.authorImagePath = authorImagePath
-        self.authorName = authorName
-        
+        self.photo = photo
     }
     
     init?(snapshot: DataSnapshot) {
         // 3
         guard
             let value = snapshot.value as? [String: Any],
-            let authorImagePath = value["authorImagePath"] as? String,
-            let authorName = value["authorName"] as? String,
-            let text = value["text"] as? String else {
+            let postID = value["postID"] as? Int,
+            let text = value["text"] as? String,
+            let photo = value["photo"] as? String
+            else {
                 return nil
         }
         
         self.ref = snapshot.ref
+        self.postID = postID
         self.text = text
-        self.authorImagePath = authorImagePath
-        self.authorName = authorName
+        self.photo = photo
+//        self.authorImagePath = authorImagePath
+//        self.authorName = authorName
     }
     
     func toAnyObject() -> [String: Any] {
         // 4
         return [
+            "postID": postID,
             "text": text,
-            "authorImagePath": authorImagePath,
-            "authorName": authorName,
+            "photo": photo
+//            "authorName": authorName,
         ]
     }
 }

@@ -78,8 +78,8 @@ class NewsViewController: UITableViewController {
             DispatchQueue.main.async {
                 for post in news {
                     self.newsDB.add(post)
-                    let newsFB = NewsFB(text: post.text, authorImagePath: post.authorImagePath, authorName: post.authorName)
-                    let newsRef = self.ref.child(String(post.id))
+                    let newsFB = NewsFB(postID: post.postID, text: post.text, photo: post.photo_max)
+                    let newsRef = self.ref.child(String(post.postID))
                     newsRef.setValue(newsFB.toAnyObject())
                 }
             }
@@ -119,12 +119,14 @@ class NewsViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: NewsTableViewCell.identifier, for: indexPath) as! NewsTableViewCell
         
         let friend = News[indexPath.row]
-        cell.NewsText!.text = ("\(friend.authorName) \(friend.text)")
-        cell.self.imageView!.sd_setImage(with:  URL(string: friend.authorImagePath)!)
-        cell.self.imageView!.layer.cornerRadius = 50;
-        cell.self.imageView!.clipsToBounds = true
-        cell.self.imageView!.layer.borderWidth = 5
-        cell.self.imageView!.layer.borderColor = UIColor.black.cgColor
+        cell.PostText.text = friend.text ?? "vkxk"
+        //cell.self.imageView!.sd_setImage(with:  URL(string: friend.photo)!)
+//        cell.self.imageView!.layer.cornerRadius = 50;
+//        cell.self.imageView!.clipsToBounds = true
+//        cell.self.imageView!.layer.borderWidth = 5
+//        cell.self.imageView!.layer.borderColor = UIColor.black.cgColor
+//
+        
 
         return cell
     }

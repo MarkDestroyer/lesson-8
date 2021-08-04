@@ -17,7 +17,7 @@ protocol NewsDBProtocol {
 
 class NewsDB: NewsDBProtocol {
     
-    let config = Realm.Configuration(schemaVersion: 3)
+    let config = Realm.Configuration(schemaVersion: 5)
     lazy var mainRealm = try! Realm(configuration: config)
     var group: Array<NewsRealm> = [NewsRealm]()
     
@@ -40,7 +40,7 @@ class NewsDB: NewsDBProtocol {
         
             let users = mainRealm.objects(NewsRealm.self)
             
-        users.forEach { print($0.date, $0.authorName, $0.likes) }
+        users.forEach { print($0.postID, $0.text, $0.trackCode) }
         
             print(mainRealm.configuration.fileURL)
             

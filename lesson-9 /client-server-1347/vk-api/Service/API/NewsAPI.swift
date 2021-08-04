@@ -13,7 +13,7 @@ import RealmSwift
 
 final class NewsAPI {
     
-    let baseUrl = "https://api.vk.com/method"
+    let baseUrl = "https://api.vk.com/method/"
     let token = Session.shared.token
     let cliendId = Session.shared.userId
     let version = "5.21"
@@ -29,8 +29,8 @@ final class NewsAPI {
             "access_token": token,
                           "user_id": cliendId,
                           "source_ids": "friends,groups,pages",
-                          "filters": "post",
-                          "count": "20",
+                          "filters": "post, date",
+                          "count": "100",
                           "fields": "first_name,last_name,name,photo_100,online",
                           "v": version
         ]
@@ -39,7 +39,7 @@ final class NewsAPI {
         
         let url = baseUrl + method
         
-        AF.request(url, method: .post, parameters: parameters).responseData { response in
+        AF.request(url, method: .get, parameters: parameters).responseData { response in
             
             guard let data = response.data else { return }
             print(data.prettyJSON as Any)
