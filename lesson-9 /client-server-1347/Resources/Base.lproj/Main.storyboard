@@ -19,10 +19,10 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </tabBar>
                     <connections>
-                        <segue destination="gcL-79-oBK" kind="relationship" relationship="viewControllers" id="dWq-Ia-EQX"/>
-                        <segue destination="joc-Ji-dU2" kind="relationship" relationship="viewControllers" id="koS-hV-wOj"/>
-                        <segue destination="dzS-z7-1GI" kind="relationship" relationship="viewControllers" id="jCG-3G-7rX"/>
-                        <segue destination="PvH-Ob-wIK" kind="relationship" relationship="viewControllers" id="Uzc-Ej-16E"/>
+                        <segue destination="es8-Pv-0V8" kind="relationship" relationship="viewControllers" id="DCg-z2-647"/>
+                        <segue destination="gcL-79-oBK" kind="relationship" relationship="viewControllers" id="Lo7-wD-mZi"/>
+                        <segue destination="joc-Ji-dU2" kind="relationship" relationship="viewControllers" id="Gvg-T0-Qkj"/>
+                        <segue destination="dzS-z7-1GI" kind="relationship" relationship="viewControllers" id="w4s-w4-Tze"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yRZ-BW-Y66" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -137,35 +137,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QSp-Fe-NZI" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="6020" y="-431"/>
-        </scene>
-        <!--новости-->
-        <scene sceneID="l6N-Rg-CUp">
-            <objects>
-                <tableViewController id="PvH-Ob-wIK" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="zxt-9v-p42">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="36j-Uu-6Tq">
-                                <rect key="frame" x="0.0" y="24.5" width="414" height="43.5"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="36j-Uu-6Tq" id="l0X-Ld-pmR">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="PvH-Ob-wIK" id="jbC-gn-DF8"/>
-                            <outlet property="delegate" destination="PvH-Ob-wIK" id="kzs-yc-G60"/>
-                        </connections>
-                    </tableView>
-                    <tabBarItem key="tabBarItem" title="новости" image="newspaper" catalog="system" selectedImage="newspaper.fill" id="iMs-pf-iXl"/>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="dWI-Xj-UO4" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="6086" y="-2063"/>
         </scene>
         <!--Группы-->
         <scene sceneID="Y0i-xG-8OT">
@@ -517,6 +488,47 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1bD-gg-DDq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1813" y="-1327"/>
+        </scene>
+        <!--Новости-->
+        <scene sceneID="WaR-ZO-KCV">
+            <objects>
+                <tableViewController id="es8-Pv-0V8" customClass="NewsViewController" customModule="client_server_1347" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="WGe-IB-i6w">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="NewsTableViewCell" rowHeight="124" id="8Ic-SW-rJF" customClass="NewsTableViewCell" customModule="client_server_1347" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="24.5" width="414" height="124"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="8Ic-SW-rJF" id="AWI-Db-Cc3">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="124"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UnV-5x-6zc">
+                                            <rect key="frame" x="118" y="51" width="42" height="21"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="NewsText" destination="UnV-5x-6zc" id="TWm-s0-VHe"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="es8-Pv-0V8" id="fMW-mh-xys"/>
+                            <outlet property="delegate" destination="es8-Pv-0V8" id="YhF-lV-BQw"/>
+                        </connections>
+                    </tableView>
+                    <tabBarItem key="tabBarItem" title="Новости" image="newspaper" catalog="system" selectedImage="newspaper.fill" id="Rie-8h-FHK"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="2BZ-c3-hZQ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="5528.985507246377" y="-2167.6339285714284"/>
         </scene>
     </scenes>
     <resources>
