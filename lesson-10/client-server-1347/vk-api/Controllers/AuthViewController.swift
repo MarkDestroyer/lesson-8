@@ -10,6 +10,8 @@ import WebKit
 
 class AuthViewController: UIViewController  {
 
+    let session = Session.instance
+    
     @IBOutlet weak var wkWebView: WKWebView! {
         didSet {
             wkWebView.navigationDelegate = self
@@ -18,34 +20,35 @@ class AuthViewController: UIViewController  {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        authorizeToVK()
+        getVKAccessToken()
     }
     
-    func authorizeToVK() {
+    func getVKAccessToken() {
+        
         var urlComponents = URLComponents()
+        
         urlComponents.scheme = "https"
         urlComponents.host = "oauth.vk.com"
         urlComponents.path = "/authorize"
         urlComponents.queryItems = [
-            URLQueryItem(name: "client_id", value: "7900300"),
+            URLQueryItem(name: "client_id", value: session.cliendId),
             URLQueryItem(name: "display", value: "mobile"),
             URLQueryItem(name: "redirect_uri", value: "https://oauth.vk.com/blank.html"),
             URLQueryItem(name: "scope", value: "270342"),
             URLQueryItem(name: "response_type", value: "token"),
             URLQueryItem(name: "revoke", value: "1"),
-            URLQueryItem(name: "v", value: "5.68")
+            URLQueryItem(name: "v", value: session.version)
         ]
         
         let request = URLRequest(url: urlComponents.url!)
-                
+        
+        //print(request.description)
+        
         wkWebView.load(request)
     }
-
 }
 
 extension AuthViewController: WKNavigationDelegate {
-    
     func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
         
         guard let url = navigationResponse.response.url, url.path == "/blank.html", let fragment = url.fragment  else {
@@ -62,22 +65,20 @@ extension AuthViewController: WKNavigationDelegate {
                 let value = param[1]
                 dict[key] = value
                 return dict
+            }
+        
+        guard let token = params["access_token"],
+              let userId = params["user_id"] else {
+            print("Что-то пошло не так!")
+            return
         }
         
-        guard let token = params["access_token"], let userId = params["user_id"] else { return }
+        session.userId = Int(userId)!
+        session.token = token
         
-        print(token, userId)
-        
-        Session.instance.token = token
-        Session.instance.userId = Int(userId)!
-        
-        showFriendsVC()
+        performSegue(withIdentifier: "toTabs", sender: self)
         
         decisionHandler(.cancel)
     }
-    
-    func showFriendsVC() {
-        
-        performSegue(withIdentifier: "showmenu", sender: nil)
-    }
 }
+
