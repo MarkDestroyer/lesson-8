@@ -195,6 +195,15 @@ struct Profile: Codable {
     }
 }
 
+struct CommentsNews: Codable {
+    let count: Int?
+
+    enum CodingKeys: String, CodingKey {
+        case count
+    }
+}
+
+
 // MARK: - OnlineInfo
 struct OnlineInfo: Codable {
     let visible, isOnline, isMobile: Bool

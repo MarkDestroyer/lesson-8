@@ -16,6 +16,8 @@ class FeedTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
+        
         FeedAPI(Session.instance).get{ [weak self] feed in
             guard let self = self else { return }
             self.feedItems = feed!.response.items

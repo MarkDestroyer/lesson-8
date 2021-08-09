@@ -49,7 +49,7 @@ class FeedTableViewCell: UITableViewCell {
         
         postDate.text = item.date.getDateStringFromUTC()
         postText.text = item.text
-        likesViewsReposts.text = "♡ \(item.likes.count!), ➦ \(item.reposts.count!), 👀 \(item.views.count)"
+        likesViewsReposts.text = "♡ \(item.likes.count!), ➪ \(item.reposts.count!), 👀 \(item.views.count),  💬 \(item.comments.count!)"
         
         if item.attachments != nil {
             if let firstAttachment = item.attachments?[0] {
@@ -58,7 +58,7 @@ class FeedTableViewCell: UITableViewCell {
                 
                 case "video":
                     
-                    postPhoto.image = UIImage(named: "defaultimage")
+                    postPhoto.image = UIImage(named: "hz")
                 
                 case "link":
                     
