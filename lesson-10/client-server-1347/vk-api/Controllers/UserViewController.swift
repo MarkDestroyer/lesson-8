@@ -6,121 +6,82 @@
 //
 
 import UIKit
-import RealmSwift
-import SDWebImage
+import Alamofire
+import AlamofireImage
 import Firebase
 
-
-class UserProfileViewController: UIViewController {
+class UserInfoViewController: UIViewController {
     
-    @IBOutlet var imageView: UIImageView!
-    @IBOutlet var nameLabel: UILabel!
-    @IBOutlet weak var townLabel: UILabel!
-    @IBOutlet weak var bd: UILabel!
+    @IBOutlet weak var userImage: RoundedImageView!
+    @IBOutlet weak var userName: UILabel!
+    @IBOutlet weak var pinIcon: UIImageView!
+    @IBOutlet weak var userLocation: UILabel!
     
-    let userApi = UserAPI()
-    var user: Array<ProfileU> = [ProfileU]()
-    let personDB = PersonDB()
-    let authService = Auth.auth()
-    private var User = [UserFB]()
-    let ref = Database.database().reference(withPath: "userinfo/user") // ссылка на контейнер/папку в Database
+    let userDB = UserDB()
     
-    
-    func loadData() {
-        do {
-            let realm = try Realm()
-            
-            let userinfo = realm.objects(ProfileU.self)
-            
-            self.user = Array(userinfo)
-            
-            for person in user {
-                let firstname = person.firstName
-                let lastname = person.lastName
-                let fullname = ("\(firstname) \(lastname)")
-                let town = person.home_town
-                let birthday = person.bdate
-                nameLabel.text = fullname
-                townLabel.text = town
-                bd.text = birthday
-                imageView.sd_setImage(with:  URL(string: person.photo_max)!)
-                self.imageView.layer.cornerRadius = 75;
-                self.imageView.clipsToBounds = true
-                self.imageView.layer.borderWidth = 5
-                self.imageView.layer.borderColor = UIColor.black.cgColor
-                let tap = UITapGestureRecognizer(target: self, action: #selector(viewOnTapped))
-                imageView.addGestureRecognizer(tap)
-                imageView.isUserInteractionEnabled = true
-            }
-        } catch {
-            // если произошла ошибка, выводим ее в консоль
-            print(error)
-        }
-    }
-    
-    
-    private func springAnimationFriends() {
-        let animation = CASpringAnimation(keyPath: "transform.scale")
-        animation.fromValue = 0
-        animation.toValue = 1
-        animation.stiffness = 1000
-        animation.mass = 3
-        animation.duration = 3
-        animation.beginTime = CACurrentMediaTime() + 1
-        imageView.layer.add(animation, forKey: nil)
-    }
-    
-    @objc func viewOnTapped() {
-        springAnimationFriends()
-    }
-    
-    private func showLoginVC() {
-        guard let vc = storyboard?.instantiateViewController(identifier: "LoginViewController") else {return}
-        guard let window = self.view.window else {return}
-        window.rootViewController = vc
-    }
-    
-    
-    
-    @IBAction func SignOutAction(_ sender: Any) {
-        
-        try?authService.signOut()
-        showLoginVC()
-    }
-    
+    let ref = Database.database().reference(withPath: "userinfo/users")
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        userApi.getUserInfo {[weak self] userinfo in
-            guard let self = self else {return}
-            
-            DispatchQueue.main.async {
-                
-                self.personDB.add(userinfo)
-                let friendFB = UserFB(name: userinfo.firstName, lastname: userinfo.lastName, image: userinfo.photo_max, bd: userinfo.bdate, town: userinfo.home_town)
-                let friendRef = self.ref.child(String(userinfo.id))
-                friendRef.setValue(friendFB.toAnyObject())
-            
-        }
-            self.ref.observe(.value, with: { [self] snapshot in
-            var info: [UserFB] = []
-            
-            for child in snapshot.children {
-                if let snapshot = child as? DataSnapshot,
-                   let profile = UserFB(snapshot: snapshot) {
-                    info.append(profile)
-                    self.nameLabel.text = ("\(profile.name) \(profile.lastname)")
-                    self.bd.text = profile.bd
-                    self.townLabel.text = profile.town
-                    self.imageView.sd_setImage(with:  URL(string: profile.image)!)
-                }
-            }
-            
-            self.User = info
-        })
+        let localUser = UserDB().get()
         
+        if localUser != nil {
+            display(localUser!)
+        }
+        
+        UserAPI(Session.instance).get{ user in
+            guard let user = user else { return }
+            if user != localUser {
+                self.update(user)
+                self.addUpdateRemote(user)
+            }
+        }
+    }
+    
+    private func display(_ user: User) {
+        
+        self.userName.text = "\(user.firstName) \(user.lastName)"
+        self.userLocation.text = "\(user.city), \(user.country)."
+        
+        if let imageURL = user.imageURL {
+            AF.request(imageURL, method: .get).responseImage { response in
+                guard let image = response.value else { return }
+                self.userImage.image = image
+            }
+        }
+    }
+    
+    private func update(_ user: User) {
+        
+        userDB.addUpdate(user)
+        self.display(user)
+    }
+    
+    private func addUpdateRemote(_ user: User) {
+        
+        let remoteUser = UserFB(id: user.id,
+                                firstName: user.firstName,
+                                lastName: user.lastName,
+                                city: user.city,
+                                country: user.country,
+                                imageURL: user.imageURL ?? "")
+        
+        let userRef = ref.child(user.firstName)
+        userRef.setValue(remoteUser.toAnyObject())
+        
+        let alert = UIAlertController(title: "Успех!",
+                                      message: "Пользователь \(user.firstName) \(user.lastName) успешно добавлен в Firebase.",
+                                      preferredStyle: UIAlertController.Style.alert)
+        
+        alert.addAction(UIAlertAction(title: "Ну дык!",
+                                      style: UIAlertAction.Style.default,
+                                      handler: nil))
+        
+        self.present(alert, animated: true, completion: nil)
+    
+        
+    
     }
 }
 
-}

@@ -7,51 +7,58 @@
 
 import Foundation
 import Alamofire
-import DynamicJSON
-import RealmSwift
 
-final class UserAPI {
+// === ИНФО О ПОЛЬЗОВАТЕЛЕ (РУЧНОЙ ПАРСИНГ) ===
+
+class UserAPI {
     
     let baseUrl = "https://api.vk.com/method"
-    let token = Session.instance.token
-    let cliendId = Session.instance.userId
-    let version = "5.31"
-    let personDB = PersonDB()
+    let method = "/users.get"
     
+    var params: Parameters
     
+    init(_ session: Session) {
+        
+        self.params = [
+            "client_id": session.cliendId,
+            "user_id": session.userId,
+            "access_token": session.token,
+            "v": session.version,
+            "fields": "has_photo, photo_max, city, country",
+        ]
+        
+    }
     
-    //DynamicJSON
-    func getUserInfo(completion: @escaping(ProfileU)->()) {
-
-        let method = "/users.get"
-
-        let parameters: Parameters = [
-            "access_token": Session.instance.token,
-           "user_id": cliendId,
-            "extended": "1",
-           "fields": "first_name, last_name, photo_max, home_town, bdate",
-            "schools": "year_to",
-            "v": version]
-
+    func get(_ completion: @escaping (User?) -> ()) {
+        
         let url = baseUrl + method
         
-        AF.request(url, method: .get, parameters: parameters).responseData { response in
-
+        AF.request(url, method: .get, parameters: params).responseData { response in
+            
             guard let data = response.data else { return }
-            print(data.prettyJSON as Any)
-
-            guard let items = JSON(data).response.array else { return }
-            let profile = items.map { ProfileU(json: $0)}
-
-            guard let firstUser = profile.first else {return}
-
-
-            DispatchQueue.main.async {
-
-               self.personDB.saveUserData(firstUser)
-
-                completion(firstUser)
-
+            
+            do {
+                let json: Any = try JSONSerialization.jsonObject(with: data, options: .mutableContainers)
+                let object = json as! [String: Any]
+                let response = object["response"] as! [Any]
+                let data = response[0] as! [String: Any]
+                let city = data["city"] as! [String: Any]
+                let country = data["country"] as! [String: Any]
+                
+                let user = User()
+                
+                user.id = data["id"] as! Int
+                user.firstName = data["first_name"] as! String
+                user.lastName = data["last_name"] as! String
+                user.imageURL = data["photo_max"] as? String
+                user.country = country["title"] as! String
+                user.city = city["title"] as! String
+                
+                completion(user)
+                
+            }
+            catch {
+                print(error)
             }
         }
     }

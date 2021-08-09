@@ -49,7 +49,7 @@ class FeedTableViewCell: UITableViewCell {
         
         postDate.text = item.date.getDateStringFromUTC()
         postText.text = item.text
-        likesViewsReposts.text = "♡ \(item.likes.count), ➦ \(item.reposts.count), 👀 \(item.views.count)"
+        likesViewsReposts.text = "♡ \(item.likes.count!), ➦ \(item.reposts.count!), 👀 \(item.views.count)"
         
         if item.attachments != nil {
             if let firstAttachment = item.attachments?[0] {
@@ -81,6 +81,21 @@ class FeedTableViewCell: UITableViewCell {
                             self.postPhoto.image = image
                         }
                     }
+                    
+                    if let photo807 = firstAttachment.photo?.photo807 {
+                        AF.request(photo807, method: .get).responseImage { response in
+                            guard let image = response.value else { return }
+                            self.postPhoto.image = image
+                        }
+                    }
+                    
+                    if let photo1280 = firstAttachment.photo?.photo1280 {
+                        AF.request(photo1280, method: .get).responseImage { response in
+                            guard let image = response.value else { return }
+                            self.postPhoto.image = image
+                        }
+                    }
+
                     
                 default:
                     

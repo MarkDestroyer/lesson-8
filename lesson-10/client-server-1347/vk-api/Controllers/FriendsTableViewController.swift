@@ -12,7 +12,6 @@ import Firebase
 class FriendsViewController: UITableViewController {
     
     let friendsAPI = FriendsAPI()
-    //var friends: Array<User3> = [User3]()
     let friendDB = FriendDB()
     var token: NotificationToken?
     let config = Realm.Configuration(schemaVersion: 4)

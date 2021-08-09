@@ -7,6 +7,7 @@
 
 import UIKit
 import WebKit
+import KeychainAccess
 
 class AuthViewController: UIViewController  {
 

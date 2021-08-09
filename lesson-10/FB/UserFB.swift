@@ -9,55 +9,54 @@ import Foundation
 import Firebase
 
 class UserFB {
-    // 1
-    let name: String
-    let lastname: String
-    let ref: DatabaseReference?
-    let image: String
-    let bd: String
-    let town: String
     
-    init(name: String, lastname: String, image: String, bd: String, town: String) {
-        // 2
+    let id: Int
+    let firstName: String
+    let lastName: String
+    let city: String
+    let country: String
+    let imageURL: String?
+    
+    let ref: DatabaseReference?
+    
+    init(id: Int, firstName: String, lastName: String, city: String, country: String, imageURL: String?) {
+        self.id = id
+        self.firstName = firstName
+        self.lastName = lastName
+        self.city = city
+        self.country = country
+        self.imageURL = imageURL
+        
         self.ref = nil
-        self.name = name
-        self.lastname = lastname
-        self.image = image
-        self.bd = bd
-        self.town = town
     }
     
     init?(snapshot: DataSnapshot) {
-        // 3
-        guard
-            let value = snapshot.value as? [String: Any],
-            let lastname = value["lastname"] as? String,
-            let image = value["image"] as? String,
-            let bd = value["bd"] as? String,
-            let town = value["town"] as? String,
-            let name = value["name"] as? String else {
-                return nil
+        
+        guard let value = snapshot.value as? [String: Any],
+              let id = value["id"] as? Int,
+              let firstName = value["firstName"] as? String,
+              let lastName = value["lastName"] as? String,
+              let city = value["city"] as? String,
+              let country = value["country"] as? String,
+              let imageURL = value["imageURL"] as? String else {
+            return nil
         }
         
         self.ref = snapshot.ref
-        self.name = name
-        self.lastname = lastname
-        self.image = image
-        self.bd = bd
-        self.town = town
+        self.id = id
+        self.firstName = firstName
+        self.lastName = lastName
+        self.city = city
+        self.country = country
+        self.imageURL = imageURL
     }
     
-    func toAnyObject() -> [String: Any] {
-        // 4
-        return [
-            "name": name,
-            "lastname": lastname,
-            "image": image,
-            "bd": bd,
-            "town": town
-        ]
+    func toAnyObject() -> [AnyHashable: Any] {
+        return ["id": id,
+                "firstName": firstName,
+                "lastName": lastName,
+                "city": city,
+                "country": country,
+                "imageURL": imageURL!] as [AnyHashable: Any]
     }
 }
-
-
-
